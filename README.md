@@ -6,7 +6,7 @@ I first learned this game at 11th St Bar in Manhattan and wanted to understand i
 
 ## The Game
 
-German Whist is a two-player trick-taking game played with a standard 52-card deck. It has two phases:
+German Whist is a two-player trick-taking game played with a standard 52-card deck ([full rules](https://www.pagat.com/whist/german_whist.html)). It has two phases:
 
 1. **Phase 1 (Card Acquisition):** Players compete for face-up cards from a stock to build their hands. The trick winner takes the visible card; the loser takes an unknown card from underneath.
 2. **Phase 2 (Trick-Taking):** Players play out their 13-card hands. Whoever wins the majority of tricks wins the game.
