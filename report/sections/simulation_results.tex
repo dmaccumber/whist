@@ -53,9 +53,12 @@ $>10$ cards) before switching to exact minimax.
 Against the heuristic opponent, the AI wins 52.6\% of 500 games. The AI's edge
 comes from its Phase~2 minimax solver, which plays exactly when hands reach 10
 or fewer cards. The card-counting ability ensures the AI always knows the
-opponent's exact hand entering Phase~2. While 52.6\% is a modest advantage, it
-is consistent and statistically significant over 500 games (95\% CI:
-[48.2\%, 57.0\%]).
+opponent's exact hand entering Phase~2. However, with a 95\% CI of
+[48.2\%, 57.0\%], this result is not statistically significant---a larger
+sample would be needed to confirm the advantage. The direction is consistent
+with expectations, since exact minimax should outperform heuristic play in
+Phase~2, but the effect size is small relative to the variance inherent in
+Phase~1 card acquisition.
 
 \subsubsection{First-Player Advantage}
 
