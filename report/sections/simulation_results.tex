@@ -11,8 +11,8 @@ other to quantify the effectiveness of various strategies.
   \item \textbf{Heuristic:} Rule-based player using hand-coded strategy for
     both phases: win high face-up cards in Phase~1, lead aces and long suits
     in Phase~2.
-  \item \textbf{AI:} Rule-based heuristic for Phase~1, alpha-beta minimax
-    (exact at $\leq 10$ cards) for Phase~2, with full card counting.
+  \item \textbf{AI:} Rule-based heuristic for Phase~1, exact alpha-beta
+    minimax (C++ solver) for Phase~2, with full card counting.
 \end{itemize}
 
 \subsection{Head-to-Head Results}
@@ -24,8 +24,8 @@ Player 0 & Player 1 & Games & P0 Win\% & Time/Game \\
 \midrule
 Random & Random & 1000 & 52.0\% & $<0.01$s \\
 Heuristic & Random & 1000 & 93.2\% & $<0.01$s \\
-AI & Random & 500 & 91.4\% & $<0.1$s \\
-AI & Heuristic & 500 & 52.6\% & $<0.1$s \\
+AI & Random & 500 & 90.6\% & $<0.1$s \\
+AI & Heuristic & 2000 & 53.8\% & $<0.1$s \\
 Heuristic A & Heuristic B & 1000 & 47.4\% & $<0.01$s \\
 \bottomrule
 \end{tabular}
@@ -43,22 +43,20 @@ an enormous advantage.
 
 \subsubsection{AI vs.\ Random}
 
-The AI wins 91.4\% of games against random play, closely matching the
-heuristic's 93.2\%. Both use the same rule-based Phase~1 strategy; the AI's
-slight disadvantage comes from its heuristic opening in Phase~2 (for hands
-$>10$ cards) before switching to exact minimax.
+The AI wins 90.6\% of games against random play, closely matching the
+heuristic's 93.2\%. Both use the same rule-based Phase~1 strategy. The small
+gap likely reflects sampling variance rather than a systematic difference.
 
 \subsubsection{AI vs.\ Heuristic}
 
-Against the heuristic opponent, the AI wins 52.6\% of 500 games. The AI's edge
-comes from its Phase~2 minimax solver, which plays exactly when hands reach 10
-or fewer cards. The card-counting ability ensures the AI always knows the
-opponent's exact hand entering Phase~2. However, with a 95\% CI of
-[48.2\%, 57.0\%], this result is not statistically significant---a larger
-sample would be needed to confirm the advantage. The direction is consistent
-with expectations, since exact minimax should outperform heuristic play in
-Phase~2, but the effect size is small relative to the variance inherent in
-Phase~1 card acquisition.
+Against the heuristic opponent, the AI wins 53.8\% of 2000 games (95\% CI:
+[51.7\%, 56.0\%]). Since 50\% falls outside this interval, the AI's advantage
+is statistically significant at the 95\% level. The AI's edge comes from its
+exact minimax solver, which plays optimally in all 13 Phase~2 tricks. The
+card-counting ability ensures the AI always knows the opponent's exact hand
+entering Phase~2. The effect size is modest---reflecting that Phase~1 card
+acquisition (where both players use the same heuristic) contributes
+substantial variance to game outcomes.
 
 \subsubsection{First-Player Advantage}
 
@@ -99,12 +97,16 @@ Phase~2 significantly more often. Specifically:
 
 \subsection{Computational Performance}
 
+The Phase~2 minimax solver is implemented in C++ (via pybind11) using
+alpha-beta pruning with Zobrist-hashed transposition table and iterative
+deepening for move ordering.
+
 \begin{center}
 \begin{tabular}{lccc}
 \toprule
 Component & Median Time & Max Time & Notes \\
 \midrule
-Phase 2 minimax ($\leq 10$ cards) & 30ms & 100ms & Exact solve \\
+Phase 2 minimax (13 cards, C++) & 15ms & 73ms & Full exact solve \\
 Phase 1 heuristic & $<1$ms & $<1$ms & Rule-based \\
 Full AI game & $<100$ms & $<200$ms & 26 moves per game \\
 Heuristic game & $<10$ms & $<10$ms & Instant \\

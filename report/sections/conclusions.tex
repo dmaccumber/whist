@@ -48,9 +48,10 @@ Our experiments establish a clear strength hierarchy:
 
 The largest gap is between random and heuristic play (93\% win rate),
 confirming that the game rewards basic strategic awareness far more than
-it rewards optimization. The AI's advantage over the heuristic (52.6\% win
-rate) comes from exact Phase~2 play via minimax and card counting, which
-together enable optimal endgame decisions.
+it rewards optimization. The AI's advantage over the heuristic (53.8\% win
+rate, statistically significant at $p < 0.05$) comes from exact Phase~2
+play via minimax and card counting, which together enable optimal endgame
+decisions.
 
 \subsection{Limitations}
 
@@ -58,9 +59,9 @@ together enable optimal endgame decisions.
   \item Phase~1 uses rule-based heuristics rather than search-based
     optimization. ISMCTS or neural-network evaluation could potentially
     improve card acquisition decisions.
-  \item The minimax solver uses heuristic play for the first 3 moves of
-    Phase~2 (hands $>10$ cards), switching to exact solve for the remaining
-    moves. A compiled implementation could solve all 13 moves exactly.
+  \item Phase~1 and Phase~2 use identical card-acquisition heuristics,
+    limiting the AI's ability to differentiate in the opening. A stronger
+    Phase~1 strategy could widen the gap.
   \item The hand evaluation function uses hand-tuned weights; machine
     learning on self-play data could improve both Phase~1 card valuation
     and Phase~2 heuristic evaluation.

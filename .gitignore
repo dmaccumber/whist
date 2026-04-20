@@ -30,3 +30,5 @@ report/*.bcf
 .mypy_cache/
 .claude/
 .DS_Store
+*.so
+*.dylib

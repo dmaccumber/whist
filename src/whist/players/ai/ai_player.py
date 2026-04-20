@@ -60,14 +60,9 @@ class AIPlayer(BasePlayer):
         return HeuristicPlayer()._phase1_play(obs, legal_moves)
 
     def _phase2_choose(self, obs: Observation, legal_moves: list[Card]) -> Card:
-        """Use minimax for Phase 2, with heuristic fallback for large hands."""
+        """Use exact minimax for Phase 2."""
         if self.counter.phase != Phase.PHASE2:
             self.counter.transition_to_phase2()
-
-        # For large hands (>10 cards), use heuristic — minimax is too slow
-        if len(obs.my_hand) > 10:
-            from whist.players.heuristic import HeuristicPlayer
-            return HeuristicPlayer()._phase2_play(obs, legal_moves)
 
         opp_hand = self.counter.get_opponent_hand_phase2()
         my_hand = frozenset(obs.my_hand)

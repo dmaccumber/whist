@@ -46,16 +46,11 @@ balances these uses:
 
 \subsection{Minimax Performance}
 
-Our hybrid solver (3-trick heuristic lookahead + exact solve at $\leq 10$
-cards) achieves:
+Our C++ solver uses alpha-beta pruning with Zobrist-hashed transposition
+tables and iterative deepening for move ordering. It solves all 13-card
+Phase~2 positions exactly:
 \begin{itemize}
-  \item Median solve time: $< 100$ms per move
-  \item Maximum solve time: $< 500$ms per move
-  \item Exact play for positions with $\leq 10$ cards per player
-  \item Near-optimal play for the opening Phase~2 moves via quick-trick
-    heuristic evaluation
+  \item Median solve time: 15ms per move
+  \item Maximum solve time: 73ms per move (across 100 random positions)
+  \item Every Phase~2 decision is optimal---no heuristic approximation
 \end{itemize}
-
-The exact solve threshold is set high enough that the majority of Phase~2
-decisions---where suit depletion, trump battles, and endgame squeeze plays
-occur---are resolved optimally.

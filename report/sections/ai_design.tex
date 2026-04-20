@@ -21,9 +21,10 @@ alpha-beta pruning with the following optimizations:
   \item \textbf{Transposition table:} Positions are cached by
     $(\text{mask}_0, \text{mask}_1, \text{leader}, \text{lead\_id})$ to avoid
     re-solving identical positions reached via different move orders.
-  \item \textbf{Hybrid depth:} For the initial moves (13 cards each), we use a
-    3-trick lookahead with a quick-trick evaluation function, switching to
-    exact solve when hands shrink to 10 or fewer cards ($<100$ms each).
+  \item \textbf{C++ implementation:} The solver is implemented in C++ via
+    pybind11, using Zobrist hashing for the transposition table and iterative
+    deepening for move ordering. All 13-card positions solve exactly in
+    under 75ms.
 \end{itemize}
 
 \begin{algorithm}[H]
