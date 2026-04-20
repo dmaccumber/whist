@@ -1,0 +1,116 @@
+\section{AI Design}
+\label{sec:ai}
+
+Our AI system employs different algorithms for each phase, reflecting the
+fundamentally different information structures.
+
+\subsection{Phase 2: Alpha-Beta Minimax}
+
+Phase~2 is a perfect-information game: through card counting during Phase~1,
+both players' hands are fully known. We solve Phase~2 positions exactly using
+alpha-beta pruning with the following optimizations:
+
+\begin{itemize}
+  \item \textbf{Bitmask representation:} Each hand is encoded as a 64-bit
+    integer, where bit $i$ represents card $i$ (using the mapping
+    $\text{id} = (\text{rank} - 2) \times 4 + \text{suit}$). This enables
+    $O(1)$ card addition/removal via XOR.
+  \item \textbf{Move ordering:} Leaders play high cards first (descending
+    rank); followers try cheap wins first (ascending rank). Good move ordering
+    is critical for alpha-beta efficiency.
+  \item \textbf{Transposition table:} Positions are cached by
+    $(\text{mask}_0, \text{mask}_1, \text{leader}, \text{lead\_id})$ to avoid
+    re-solving identical positions reached via different move orders.
+  \item \textbf{Hybrid depth:} For the initial moves (13 cards each), we use a
+    3-trick lookahead with a quick-trick evaluation function, switching to
+    exact solve when hands shrink to 10 or fewer cards ($<100$ms each).
+\end{itemize}
+
+\begin{algorithm}[H]
+\caption{Alpha-Beta Minimax for Phase 2}
+\KwIn{hands $H_0, H_1$; trump $\tau$; leader $\ell$; bounds $\alpha, \beta$}
+\KwOut{(score for Player~0, best card)}
+\If{both hands empty}{
+  \Return $(0, \text{null})$
+}
+\If{in transposition table}{
+  \Return cached value
+}
+\ForEach{legal card $c$ in ordered moves}{
+  Play $c$, resolve trick if both cards played\;
+  $\text{score} \leftarrow \text{Minimax}(\text{new state}, \alpha, \beta)$\;
+  Update best move and $\alpha/\beta$ bounds\;
+  \If{$\beta \leq \alpha$}{
+    \textbf{break} \tcp{Prune remaining branches}
+  }
+}
+Store in transposition table\;
+\Return (best score, best card)
+\end{algorithm}
+
+\subsubsection{Quick-Trick Evaluation}
+
+For positions too large for exact solving, we estimate Player~0's tricks using
+a \emph{quick-trick} heuristic that counts:
+\begin{enumerate}
+  \item \textbf{Top winners:} Consecutive top cards in each suit (e.g., if we
+    hold the Ace and King of a suit and no higher cards remain, both are
+    winners).
+  \item \textbf{Long-suit promotions:} Extra cards in suits where we have
+    more than the opponent, which become winners after the opponent's cards
+    are exhausted.
+  \item \textbf{Ruffing potential:} Void suits with trump holdings enable
+    winning tricks by trumping opponent leads.
+  \item \textbf{Lead advantage:} Having winners when on lead is more valuable
+    than off-lead winners.
+\end{enumerate}
+
+\subsection{Phase 1: Rule-Based Heuristic}
+
+Phase~1 presents an imperfect-information challenge: we don't know the
+opponent's hand or the stock order. We use a rule-based heuristic that
+decomposes each trick into two decisions:
+
+\begin{enumerate}
+  \item \textbf{Win or lose?} The face-up card is evaluated against a
+    threshold: always win Aces and Kings, win trump cards ranked 7 or higher,
+    win Queens and Jacks of any suit, and lose deliberately for low cards.
+  \item \textbf{Card selection:} When trying to win, play the cheapest card
+    that beats the opponent. When trying to lose, shed the lowest non-trump
+    card. When leading to win, lead from the strongest suit; to lose, lead
+    the lowest non-trump.
+\end{enumerate}
+
+This simple strategy proves highly effective: it wins 93\% of games against
+random play and provides a strong hand for Phase~2.
+
+\subsubsection{Card Counting}
+
+Throughout the game, the AI maintains a \emph{card counter} that tracks:
+\begin{itemize}
+  \item All cards in its own hand
+  \item All cards played in tricks
+  \item All face-up cards observed (including those taken by the opponent)
+  \item The set of cards whose location is unknown
+\end{itemize}
+
+At the transition to Phase~2, the card counter deduces the opponent's exact
+hand: it is precisely the set of all 52 cards minus those in our hand and
+those that have been played. This enables exact minimax in Phase~2.
+
+\subsection{Difficulty Levels}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Level & Phase 1 & Phase 2 \\
+\midrule
+Easy & Rule-based heuristic & Rule-based heuristic \\
+Medium/Hard & Rule-based heuristic + card counting & Alpha-beta minimax \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The primary difference between Easy and Medium/Hard is the Phase~2 solver:
+the heuristic uses simple rules (lead aces, play long suits), while the AI
+uses exact minimax for positions with $\leq 10$ cards per player.

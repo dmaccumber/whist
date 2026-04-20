@@ -1,0 +1,53 @@
+\section{Introduction}
+\label{sec:introduction}
+
+German Whist is a two-player trick-taking card game that presents a fascinating
+blend of imperfect and perfect information. Unlike many card games where
+trick-taking is the sole objective, German Whist divides play into two distinct
+phases: a card-acquisition phase where players compete for face-up cards to
+build their hands, followed by a standard trick-taking phase where the majority
+of tricks won determines the winner.
+
+This two-phase structure creates a rich strategic landscape. In Phase~1, players
+must balance immediate tactical considerations (winning or losing each trick)
+against long-term strategic goals (assembling a strong hand for Phase~2). The
+information asymmetry---the winner sees and takes the face-up stock card while
+the loser receives an unknown card---adds a further dimension of complexity.
+
+\subsection{Motivation}
+
+Our goal is twofold:
+\begin{enumerate}
+  \item \textbf{Build a strong AI opponent} capable of playing German Whist at
+    a high level, combining game-tree search for the endgame with probabilistic
+    reasoning for the opening.
+  \item \textbf{Identify optimal strategic principles} through large-scale
+    simulation, quantifying which factors most influence game outcomes.
+\end{enumerate}
+
+\subsection{Approach}
+
+We decompose the problem by game phase:
+
+\begin{itemize}
+  \item \textbf{Phase~2 (perfect information):} Both players' hands are
+    deducible through card counting. We solve this exactly using alpha-beta
+    minimax with transposition tables, achieving optimal play in under one
+    second for all 13-card endgames.
+  \item \textbf{Phase~1 (imperfect information):} The opponent's hand and stock
+    order are unknown. We use a determinized evaluation approach: sampling
+    plausible opponent hands, simulating trick outcomes, and evaluating the
+    resulting hand quality.
+\end{itemize}
+
+We validate our AI through a tournament framework, pitting it against random
+and heuristic opponents across thousands of games. Statistical analysis of
+these simulations reveals the strategic principles presented in this report.
+
+\subsection{Organization}
+
+Section~\ref{sec:rules} formalizes the game rules.
+Section~\ref{sec:ai} details our AI algorithms.
+Sections~\ref{sec:phase2} and~\ref{sec:phase1} analyze strategy for each phase.
+Section~\ref{sec:results} presents simulation results.
+Section~\ref{sec:conclusions} summarizes our findings.

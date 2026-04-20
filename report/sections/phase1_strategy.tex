@@ -1,0 +1,84 @@
+\section{Phase 1 Strategy}
+\label{sec:phase1}
+
+Phase~1 strategy in German Whist is fundamentally about \emph{hand
+construction}---assembling the strongest possible 13-card hand for Phase~2.
+Since Phase~1 tricks don't count, winning or losing a trick matters only
+insofar as it determines which card you receive.
+
+\subsection{The Win/Lose Decision}
+
+Each Phase~1 trick presents a binary strategic choice: should you try to win
+(and take the known face-up card) or lose (and take the unknown face-down
+card)?
+
+\subsubsection{When to Win}
+
+The face-up card should be won when it is:
+\begin{itemize}
+  \item \textbf{High-value:} Aces and Kings are almost always worth winning,
+    as they are likely trick-winners in Phase~2.
+  \item \textbf{Trump:} Any trump card adds to trump control, the strongest
+    predictor of Phase~2 success.
+  \item \textbf{Synergistic:} Cards that extend existing long suits or fill
+    gaps in strong suits are more valuable than isolated high cards.
+\end{itemize}
+
+\subsubsection{When to Lose}
+
+Deliberately losing is correct when:
+\begin{itemize}
+  \item The face-up card is low and in a suit you don't want to extend.
+  \item Winning would require expending a valuable card that's better saved
+    for Phase~2 or a later Phase~1 trick.
+  \item The face-down card has positive expected value (which it does when
+    the average remaining unknown card is better than the face-up card).
+\end{itemize}
+
+\subsection{Card Valuation}
+
+Not all cards are equally valuable. Our simulation data reveals a hierarchy:
+
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+Card Category & Relative Value \\
+\midrule
+Aces (trump) & 10.0 \\
+Aces (non-trump) & 6.7 \\
+Kings (trump) & 7.0 \\
+Kings (non-trump) & 4.7 \\
+Queens, Jacks & 2.0--3.3 \\
+Mid-range (7--10) & 0.5--1.5 \\
+Low cards (2--6) & 0.3--0.5 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Critically, the value of a card depends on context. A 2 of trumps can be
+more valuable than a Queen of a side suit if it enables ruffing.
+
+\subsection{Information Management}
+
+A subtle aspect of Phase~1 is \emph{information asymmetry}. When you win a
+trick, both players know what card you received (the face-up card). When you
+lose, only you know what you received (the face-down card). This means:
+\begin{itemize}
+  \item Losing tricks selectively conceals information about your hand.
+  \item Winning tricks gives the opponent information but gives you a better
+    card (on average, the known face-up card is more desirable than the
+    unknown face-down card because you can choose when to win).
+\end{itemize}
+
+\subsection{Lead Control}
+
+Maintaining the lead in Phase~1 provides two advantages:
+\begin{enumerate}
+  \item You see the face-up card before deciding whether to try to win.
+  \item You choose which suit to play, potentially forcing the opponent to
+    play in suits where they're weak.
+\end{enumerate}
+
+However, leading is not always advantageous. If the face-up card is
+undesirable, being the follower lets you control whether you win without
+having committed a card first.

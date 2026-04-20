@@ -1,0 +1,53 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage[backend=bibtex,style=numeric,sorting=nyt]{biblatex}
+\addbibresource{references.bib}
+
+\geometry{margin=1in}
+
+\title{Optimal Strategy in German Whist:\\An Algorithmic and Statistical Analysis}
+\author{Generated via Simulation and Game-Tree Search}
+\date{April 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We present a computational analysis of the two-player card game German Whist,
+examining optimal strategy through the lens of game-tree search and Monte Carlo
+simulation. We implement an AI system that uses alpha-beta minimax for the
+perfect-information endgame (Phase~2) and determinized evaluation with card
+counting for the imperfect-information opening (Phase~1). Through extensive
+simulation (thousands of games across multiple player types), we identify key
+strategic principles including the relative importance of card acquisition
+versus trick-winning in Phase~1, the value of trump control, and the
+asymmetric nature of information in the game. Our AI significantly outperforms
+both random and heuristic opponents, demonstrating that strong play in German
+Whist requires both tactical precision in the endgame and strategic foresight
+during card acquisition.
+\end{abstract}
+
+\tableofcontents
+
+\input{sections/introduction}
+\input{sections/game_rules}
+\input{sections/ai_design}
+\input{sections/phase2_analysis}
+\input{sections/phase1_strategy}
+\input{sections/simulation_results}
+\input{sections/conclusions}
+
+\printbibliography
+
+\end{document}

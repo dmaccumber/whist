@@ -1,0 +1,84 @@
+\section{Conclusions}
+\label{sec:conclusions}
+
+\subsection{Strategic Principles}
+
+Our analysis reveals several key principles for optimal German Whist play:
+
+\begin{enumerate}
+  \item \textbf{Trump acquisition dominates Phase~1.} The strongest single
+    predictor of Phase~2 success is the number of trump cards held. Players
+    should prioritize winning trump cards from the stock above almost all
+    other considerations.
+
+  \item \textbf{Aces and Kings are worth fighting for.} High cards in any
+    suit are almost always worth the cost of winning the trick. The face-up
+    card's expected value exceeds the face-down card's expected value for all
+    cards ranked Jack or higher.
+
+  \item \textbf{Phase~2 is solvable.} Through card counting, a skilled player
+    can deduce the opponent's exact hand at the start of Phase~2 and play
+    optimally using minimax search. This makes card counting the most
+    impactful skill in the game.
+
+  \item \textbf{Information asymmetry matters.} The winner of each Phase~1
+    trick reveals information to the opponent (the face-up card they took),
+    while the loser's acquisition is hidden. This suggests that losing
+    tricks deliberately can have strategic value beyond the immediate card
+    exchange.
+
+  \item \textbf{Long suits and voids are powerful.} A hand with a long suit
+    (5+ cards) and void suits is often stronger than a balanced hand with
+    higher aggregate card values, because long suits generate multiple tricks
+    once the opponent is exhausted, and voids enable trumping.
+
+  \item \textbf{Simple heuristics are surprisingly effective.} Our
+    rule-based heuristic player wins over 91\% of games against random play,
+    suggesting that German Whist rewards basic strategic awareness
+    (winning good cards, leading aces) far more than it rewards complex
+    optimization.
+\end{enumerate}
+
+\subsection{AI Strength Hierarchy}
+
+Our experiments establish a clear strength hierarchy:
+\[
+  \text{Random} \ll \text{Heuristic} < \text{AI (Heuristic P1 + Minimax P2)}
+\]
+
+The largest gap is between random and heuristic play (93\% win rate),
+confirming that the game rewards basic strategic awareness far more than
+it rewards optimization. The AI's advantage over the heuristic (52.6\% win
+rate) comes from exact Phase~2 play via minimax and card counting, which
+together enable optimal endgame decisions.
+
+\subsection{Limitations}
+
+\begin{itemize}
+  \item Phase~1 uses rule-based heuristics rather than search-based
+    optimization. ISMCTS or neural-network evaluation could potentially
+    improve card acquisition decisions.
+  \item The minimax solver uses heuristic play for the first 3 moves of
+    Phase~2 (hands $>10$ cards), switching to exact solve for the remaining
+    moves. A compiled implementation could solve all 13 moves exactly.
+  \item The hand evaluation function uses hand-tuned weights; machine
+    learning on self-play data could improve both Phase~1 card valuation
+    and Phase~2 heuristic evaluation.
+\end{itemize}
+
+\subsection{Future Work}
+
+Promising directions for future research include:
+\begin{itemize}
+  \item \textbf{Neural network evaluation:} Train a neural network on
+    self-play games to evaluate hand quality, replacing the hand-coded
+    heuristic.
+  \item \textbf{C/Rust implementation:} Rewriting the minimax solver in a
+    compiled language would enable full 13-card exact solving and make ISMCTS
+    feasible for interactive play.
+  \item \textbf{Opponent modeling:} Adapting Phase~1 strategy based on
+    observed opponent tendencies (aggressive vs.\ passive, predictable suit
+    preferences).
+  \item \textbf{Bidding variants:} Extending the analysis to German Whist
+    variants with scoring multipliers or best-of-series play.
+\end{itemize}

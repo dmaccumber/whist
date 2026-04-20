@@ -1,0 +1,71 @@
+\section{Game Rules and Formalization}
+\label{sec:rules}
+
+\subsection{Setup}
+
+German Whist is played by two players with a standard 52-card deck. Cards are
+ranked Ace (high), King, Queen, Jack, 10, 9, 8, 7, 6, 5, 4, 3, 2 (low) within
+each suit. Each player is dealt 13 cards, and the remaining 26 cards form the
+\emph{stock}. The top card of the stock is placed face-up; its suit determines
+the \emph{trump suit} for the entire game.
+
+\subsection{Trick-Taking Rules}
+
+The non-dealer leads to the first trick. Standard trick-taking rules apply:
+\begin{itemize}
+  \item The leader may play any card from their hand.
+  \item The follower \emph{must follow suit} if able (play a card of the same
+    suit as the lead). If unable, they may play any card.
+  \item If both cards are the same suit, the higher-ranked card wins.
+  \item If the follower plays a different suit, the leader wins
+    \emph{unless} the follower played a trump, in which case the trump wins.
+\end{itemize}
+
+\subsection{Phase 1: Card Acquisition (Tricks 1--13)}
+
+After each trick in Phase~1:
+\begin{enumerate}
+  \item The trick winner takes the face-up card from the stock and adds it to
+    their hand.
+  \item The trick loser takes the next (face-down) card from the stock,
+    without revealing it.
+  \item The next card on the stock is turned face-up.
+  \item The trick winner leads the next trick.
+\end{enumerate}
+
+Crucially, Phase~1 tricks do not count toward the final score. The sole purpose
+of Phase~1 is to \emph{build a strong hand} for Phase~2. Since both players
+draw a card after each trick, hand sizes remain at 13 throughout Phase~1.
+
+\subsection{Phase 2: Trick-Taking (Tricks 14--26)}
+
+After the stock is exhausted (13 tricks), Phase~2 begins. Play continues
+normally but without card drawing. The winner of the 13th trick in Phase~1
+leads first in Phase~2. Whoever wins the \emph{majority} of the 13 Phase~2
+tricks wins the game. Since 13 is odd, draws are impossible.
+
+\subsection{Formal State Space}
+
+We define the game state as a tuple:
+\[
+  s = (H_0, H_1, S, \tau, \ell, \phi, c_\ell, t_0, t_1)
+\]
+where $H_0, H_1$ are the players' hands (sets of cards), $S$ is the stock
+(ordered sequence), $\tau$ is the trump suit, $\ell \in \{0,1\}$ is the
+current leader, $\phi \in \{1,2\}$ is the phase, $c_\ell$ is the card led
+(if any), and $t_0, t_1$ are Phase~2 trick counts.
+
+\subsubsection{Information Sets}
+
+In Phase~1, each player's \emph{information set} consists of:
+\begin{itemize}
+  \item Their own hand
+  \item All cards played in previous tricks
+  \item All face-up cards observed (including those taken by either player)
+  \item The current face-up card on the stock
+\end{itemize}
+The opponent's hand composition and the order of remaining stock cards are
+unknown, making Phase~1 a game of \emph{imperfect information}.
+
+In Phase~2, a player who has perfectly tracked all cards can deduce the
+opponent's exact hand, making Phase~2 a game of \emph{perfect information}.
