@@ -24,6 +24,7 @@ class Player(Protocol):
         follow_card: Card,
         winner: int,
         face_up_taken: Optional[Card],
+        face_down_taken: Optional[Card],
         phase: Phase,
     ) -> None:
         """Called after each trick so players can track cards."""
@@ -99,6 +100,7 @@ class Game:
         state = self.state
         old_phase = state.phase
         face_up = state.face_up
+        face_down = state.stock[1] if len(state.stock) > 1 else None
 
         # Leader plays
         leader = state.leader
@@ -133,7 +135,7 @@ class Game:
         # Notify players
         for p in self.players:
             p.notify_trick_result(
-                lead_card, follow_card, winner, face_up, old_phase,
+                lead_card, follow_card, winner, face_up, face_down, old_phase,
             )
 
         if self.on_trick:

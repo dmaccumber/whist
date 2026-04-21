@@ -127,6 +127,7 @@ def display_trick_result(
     winner: int,
     player_id: int,
     face_up: Optional[Card],
+    face_down: Optional[Card],
     phase: Phase,
 ) -> None:
     """Display the result of a trick."""
@@ -144,10 +145,17 @@ def display_trick_result(
             took = Text("  You took: ")
             took.append_text(styled_card(face_up))
             console.print(took)
+            if face_down is not None:
+                opp_took = Text("  Opponent took: [dim]face-down card[/dim]")
+                console.print(opp_took)
         else:
             took = Text("  Opponent took: ")
             took.append_text(styled_card(face_up))
             console.print(took)
+            if face_down is not None:
+                you_took = Text("  You took: ")
+                you_took.append_text(styled_card(face_down))
+                console.print(you_took)
 
     console.print("  " + "─" * 40)
 

@@ -27,9 +27,10 @@ class HumanPlayer(BasePlayer):
         follow_card: Card,
         winner: int,
         face_up_taken: Optional[Card],
+        face_down_taken: Optional[Card],
         phase: Phase,
     ) -> None:
         ui.display_trick_result(
             lead_card, follow_card, winner,
-            self.player_id, face_up_taken, phase,
+            self.player_id, face_up_taken, face_down_taken, phase,
         )

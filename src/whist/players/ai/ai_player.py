@@ -87,6 +87,7 @@ class AIPlayer(BasePlayer):
         follow_card: Card,
         winner: int,
         face_up_taken: Optional[Card],
+        face_down_taken: Optional[Card],
         phase: Phase,
     ) -> None:
         if self.counter is not None:
