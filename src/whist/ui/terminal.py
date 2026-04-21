@@ -110,8 +110,8 @@ def display_hand(obs: Observation) -> None:
     console.print()
 
 
-def display_legal_moves(legal_moves: list[Card]) -> None:
-    """Display numbered legal moves."""
+def display_legal_moves(legal_moves: list[Card], hint: Optional[Card] = None) -> None:
+    """Display numbered legal moves, optionally highlighting the recommended play."""
     result = Text("  Legal plays: ")
     for i, card in enumerate(legal_moves):
         if i > 0:
@@ -119,6 +119,9 @@ def display_legal_moves(legal_moves: list[Card]) -> None:
         result.append(f"[{i + 1}] ")
         result.append_text(styled_card(card))
     console.print(result)
+
+    if hint is not None:
+        console.print(f"  [italic cyan]Suggested: {hint.short_str()}[/italic cyan]")
 
 
 def display_trick_result(

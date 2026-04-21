@@ -18,11 +18,11 @@ from whist.ui import terminal as ui
 console = Console()
 
 
-def play_interactive(difficulty: str = "medium", seed: int | None = None) -> None:
+def play_interactive(difficulty: str = "medium", seed: int | None = None, hint: bool = False) -> None:
     """Play a game of German Whist against the AI."""
     rng = random.Random(seed)
 
-    human = HumanPlayer(player_id=0)
+    human = HumanPlayer(player_id=0, show_hints=hint)
 
     if difficulty == "easy":
         from whist.players.heuristic import HeuristicPlayer
@@ -100,13 +100,18 @@ def main() -> None:
         default=None,
         help="Random seed for reproducibility",
     )
+    parser.add_argument(
+        "--hint",
+        action="store_true",
+        help="Show the AI's recommended play before each move",
+    )
 
     args = parser.parse_args()
 
     if args.simulate:
         run_simulation(args.simulate, seed=args.seed)
     else:
-        play_interactive(args.difficulty, seed=args.seed)
+        play_interactive(args.difficulty, seed=args.seed, hint=args.hint)
 
 
 if __name__ == "__main__":
