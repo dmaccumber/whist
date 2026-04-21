@@ -146,8 +146,7 @@ def display_trick_result(
             took.append_text(styled_card(face_up))
             console.print(took)
             if face_down is not None:
-                opp_took = Text("  Opponent took: [dim]face-down card[/dim]")
-                console.print(opp_took)
+                console.print("  Opponent took: [dim]face-down card[/dim]")
         else:
             took = Text("  Opponent took: ")
             took.append_text(styled_card(face_up))
